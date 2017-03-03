@@ -10,8 +10,6 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
-
 /**
  * Created by Aspire on 01.03.2017.
  */

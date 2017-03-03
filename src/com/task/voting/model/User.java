@@ -71,7 +71,7 @@ public class User extends NamedEntity {
             this.roles = Collections.emptySet();
         }else{
             this.roles = EnumSet.copyOf(roles);
-        };
+        }
     }
 
     @Override
