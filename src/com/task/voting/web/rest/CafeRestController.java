@@ -41,7 +41,7 @@ public class CafeRestController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@Valid @RequestBody Cafe cafe, @PathVariable("id") int id) {
+    public void update(@Valid @RequestBody Cafe cafe) {
         service.update(cafe);
     }
 

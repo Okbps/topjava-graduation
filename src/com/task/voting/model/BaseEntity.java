@@ -32,10 +32,6 @@ public class BaseEntity implements HasId {
         return id;
     }
 
-    public boolean isNew() {
-        return (getId() == null);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

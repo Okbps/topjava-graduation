@@ -26,20 +26,24 @@ public class VoteService {
         return repository.save(vote);
     }
 
+    public Vote save(int userId, LocalDateTime ldt, int cafeId){
+        return repository.save(userId, ldt, cafeId);
+    }
+
     public void delete(int userId, LocalDateTime dateTime) {
         checkNotFoundWithId(repository.delete(userId, dateTime), userId);
     }
 
-    public Vote get(int id) throws NotFoundException {
-        return checkNotFoundWithId(repository.get(id), id);
+    public Vote get(int userId, LocalDateTime localDateTime) {
+        return repository.get(userId, localDateTime);
     }
 
     public List<Vote> getAll(int userId) {
         return repository.getAll(userId);
     }
 
-    public void update(Vote user) {
-        Assert.notNull(user, "vote must not be null");
-        repository.save(user);
+    public void update(Vote vote) {
+        Assert.notNull(vote, "vote must not be null");
+        repository.save(vote);
     }
 }
