@@ -1,8 +1,6 @@
 package com.task.voting.model;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
@@ -10,7 +8,6 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.*;
 import java.util.*;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_NAME, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.name=?1"),
@@ -29,7 +26,6 @@ public class User extends NamedEntity {
     @Length(min = 5)
     private String password;
 
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")

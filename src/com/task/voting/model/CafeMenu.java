@@ -17,11 +17,12 @@ import java.time.LocalDateTime;
  */
 @NamedQueries({
         @NamedQuery(name = CafeMenu.DELETE, query = "DELETE FROM CafeMenu cm WHERE cm.id=:id"),
-        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm ORDER BY cm.name"),
+        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe ORDER BY cm.dateTime, cm.dish"),
+//        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm ORDER BY cm.dateTime, cm.dish"),
 })
 @Entity
 @Table(name = "menus")
-public class CafeMenu extends NamedEntity{
+public class CafeMenu extends BaseEntity{
 
     public static final String DELETE = "CafeMenu.delete";
     public static final String ALL_SORTED = "CafeMenu.getAllSorted";

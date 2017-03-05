@@ -4,9 +4,12 @@ import com.task.voting.model.Cafe;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+
+import static com.task.voting.model.Cafe.GRAPH_WITH_MENUS;
 
 /**
  * Created by Aspire on 08.02.2017.
@@ -39,6 +42,8 @@ public class CafeRepository {
     }
 
     public List<Cafe> getAll() {
+//        EntityGraph entityGraph = em.getEntityGraph(GRAPH_WITH_MENUS);
+//        return em.createNamedQuery(Cafe.ALL_SORTED, Cafe.class).setHint("javax.persistence.fetchgraph", entityGraph).getResultList();
         return em.createNamedQuery(Cafe.ALL_SORTED, Cafe.class).getResultList();
     }
 }
