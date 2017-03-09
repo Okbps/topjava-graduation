@@ -42,8 +42,9 @@ public class UserService implements UserDetailsService {
         repository.save(user);
     }
 
+    @Override
     public AuthorizedUser loadUserByUsername(String name) throws UsernameNotFoundException {
-        User u = repository.getByName(name.toLowerCase());
+        User u = repository.getByName(name);
         if (u == null) {
             throw new UsernameNotFoundException("User " + name + " is not found");
         }

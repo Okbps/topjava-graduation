@@ -29,7 +29,7 @@ public class CafeMenuRepository {
     }
 
     public CafeMenu get(int id) {
-        return em.find(CafeMenu.class, id);
+        return em.createNamedQuery(CafeMenu.BY_ID, CafeMenu.class).setParameter("id", id).getSingleResult();
     }
 
     @Transactional

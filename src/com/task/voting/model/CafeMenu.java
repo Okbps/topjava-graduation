@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
  */
 @NamedQueries({
         @NamedQuery(name = CafeMenu.DELETE, query = "DELETE FROM CafeMenu cm WHERE cm.id=:id"),
+        @NamedQuery(name = CafeMenu.BY_ID, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe " +
+                "WHERE cm.id=:id ORDER BY cm.dateTime, cm.dish"),
         @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe ORDER BY cm.dateTime, cm.dish"),
-//        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm ORDER BY cm.dateTime, cm.dish"),
 })
 @Entity
 @Table(name = "menus")
@@ -26,6 +27,7 @@ public class CafeMenu extends BaseEntity{
 
     public static final String DELETE = "CafeMenu.delete";
     public static final String ALL_SORTED = "CafeMenu.getAllSorted";
+    public static final String BY_ID = "CafeMenu.getById";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", nullable = false)
@@ -42,15 +44,12 @@ public class CafeMenu extends BaseEntity{
 
     @Column(name = "price", nullable = false)
     @Range(min = 0, max = 5000)
-    private int price;
+    private double price;
 
     public CafeMenu(){}
 
-    public CafeMenu(CafeMenu cafeMenu){
-        this(cafeMenu.getCafe(), cafeMenu.getDateTime(), cafeMenu.getDish(), cafeMenu.getPrice());
-    }
-
-    public CafeMenu(Cafe cafe, LocalDateTime dateTime, String dish, int price) {
+    public CafeMenu(Integer id, Cafe cafe, LocalDateTime dateTime, String dish, double price) {
+        this.id = id;
         this.cafe = cafe;
         this.dateTime = dateTime;
         this.dish = dish;
@@ -81,11 +80,11 @@ public class CafeMenu extends BaseEntity{
         this.dish = dish;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

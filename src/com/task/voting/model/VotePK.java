@@ -24,9 +24,9 @@ public class VotePK implements Serializable{
 
     public VotePK(){}
 
-    public VotePK(User user, LocalDateTime dateTime) {
+    public VotePK(User user, LocalDateTime ldt) {
         this.user = user;
-        this.dateTime = dateTime;
+        this.dateTime = ldt;
     }
 
     @JsonIgnore

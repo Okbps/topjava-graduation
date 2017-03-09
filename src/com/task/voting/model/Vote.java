@@ -4,10 +4,11 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @NamedQueries({
-        @NamedQuery(name = Vote.DELETE, query = "DELETE FROM Vote v WHERE v.id.user.id=:userId and v.id.dateTime=:dateTime"),
+        @NamedQuery(name = Vote.DELETE, query = "DELETE FROM Vote v WHERE v.id=:votePK"),
         @NamedQuery(name = Vote.ALL_SORTED, query = "SELECT v FROM Vote v JOIN FETCH v.cafe " +
                 "WHERE v.id.user.id=:userId " +
                 "ORDER BY v.id.dateTime"),
@@ -45,6 +46,11 @@ public class Vote {
         this.cafe = cafe;
     }
 
+    public Vote(User user, LocalDateTime ldt, Cafe cafe) {
+        this.id = new VotePK(user, ldt);
+        this.cafe = cafe;
+    }
+
     public VotePK getId() {
         return id;
     }
@@ -55,5 +61,9 @@ public class Vote {
 
     public void setCafe(Cafe cafe) {
         this.cafe = cafe;
+    }
+
+    public void setUser(User user) {
+        this.id.setUser(user);
     }
 }

@@ -1,15 +1,13 @@
 package com.task.voting.repository;
 
+import com.task.voting.AuthorizedUser;
 import com.task.voting.model.Cafe;
 import com.task.voting.model.Vote;
 import com.task.voting.model.VotePK;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -26,7 +24,7 @@ public class VoteRepository {
 
     @Transactional
     public Vote save(Vote vote) {
-        em.remove(vote);
+//        em.remove(vote);
         em.persist(vote);
         return vote;
     }
@@ -60,17 +58,20 @@ public class VoteRepository {
     }
 
     public Vote get(int userId, LocalDateTime localDateTime) {
-        return em.createNamedQuery(Vote.BY_USER_DATETIME, Vote.class)
-                .setParameter("userId", userId)
-                .setParameter("dateTime", localDateTime)
-                .getSingleResult();
+        try {
+            return em.createNamedQuery(Vote.BY_USER_DATETIME, Vote.class)
+                    .setParameter("userId", userId)
+                    .setParameter("dateTime", localDateTime)
+                    .getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
     }
 
     @Transactional
-    public boolean delete(int userId, LocalDateTime dateTime) {
+    public boolean delete(Vote vote) {
         return em.createNamedQuery(Vote.DELETE)
-                .setParameter("userId", userId)
-                .setParameter("dateTime", dateTime)
+                .setParameter("votePK", vote.getId())
                 .executeUpdate() != 0;
     }
 

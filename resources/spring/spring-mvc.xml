@@ -27,10 +27,6 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:prefix="/WEB-INF/jsp/"
-          p:suffix=".jsp"/>
-
     <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
         <property name="formatters">
             <set>
@@ -40,6 +36,14 @@
         </property>
     </bean>
 
-    <context:component-scan base-package="com.task.voting.web.rest"/>
+    <context:component-scan base-package="com.task.voting.web"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/jsp/"
+          p:suffix=".jsp"/>
+
+    <mvc:interceptors>
+        <bean class="com.task.voting.web.interceptor.ModelInterceptor"/>
+    </mvc:interceptors>
 </beans>

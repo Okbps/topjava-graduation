@@ -6,10 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
 
@@ -44,6 +40,6 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     }
 
     public User getUser() {
-        return user;
+        return get().user;
     }
 }
