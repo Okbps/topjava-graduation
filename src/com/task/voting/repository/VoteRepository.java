@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ public class VoteRepository {
 
     @Transactional
     public Vote save(int userId, LocalDateTime ldt, int cafeId) {
-        Vote found = get(userId, ldt);
+        Vote found = get(userId, ldt.toLocalDate());
 
         if(found==null) {
 
@@ -43,7 +45,7 @@ public class VoteRepository {
                     .executeUpdate();
 
             if(result==1){
-                return get(userId, ldt);
+                return get(userId, ldt.toLocalDate());
             } else {
                 return null;
             }
@@ -51,17 +53,19 @@ public class VoteRepository {
         }else{
 
             found.setCafe(em.getReference(Cafe.class, cafeId));
+            found.getId().setDateTime(ldt);
             return em.merge(found);
 
         }
 
     }
 
-    public Vote get(int userId, LocalDateTime localDateTime) {
+    public Vote get(int userId, LocalDate localDate) {
         try {
-            return em.createNamedQuery(Vote.BY_USER_DATETIME, Vote.class)
+            return em.createNamedQuery(Vote.BY_USER_DATE, Vote.class)
                     .setParameter("userId", userId)
-                    .setParameter("dateTime", localDateTime)
+                    .setParameter("startDateTime", localDate.atTime(LocalTime.MIN))
+                    .setParameter("endDateTime", localDate.atTime(LocalTime.MAX))
                     .getSingleResult();
         }catch(NoResultException e){
             return null;

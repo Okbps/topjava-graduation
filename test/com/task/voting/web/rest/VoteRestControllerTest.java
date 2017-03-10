@@ -33,7 +33,6 @@ public class VoteRestControllerTest extends AbstractControllerTest{
     @Test
     public void testGetAll() throws Exception {
         mockMvc.perform(get(REST_URL + USER_ID))
-//                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -46,9 +45,8 @@ public class VoteRestControllerTest extends AbstractControllerTest{
                 REST_URL +
                         USER_ID +
                         "/" +
-                        DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(VOTE1.getId().getDateTime())
+                        DateTimeFormatter.ISO_LOCAL_DATE.format(VOTE1.getId().getDateTime())
         ))
-//                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -60,16 +58,28 @@ public class VoteRestControllerTest extends AbstractControllerTest{
     public void testUpdate() throws Exception {
         Vote updated = getUpdatedVote();
 
-        mockMvc.perform(put(REST_URL + USER_ID)
+        mockMvc.perform(put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(USER1)))
                 .andExpect(status().isOk());
 
-        Vote returned = service.get(USER_ID, updated.getId().getDateTime());
+        Vote returned = service.get(USER_ID, updated.getId().getDateTime().toLocalDate());
         assertEquals(updated.getCafe(), returned.getCafe());
         assertEquals(updated.getId().getDateTime(), returned.getId().getDateTime());
     }
+
+    @Test
+    public void testUpdateInvalid() throws Exception {
+        Vote invalid = new Vote(USER1, LocalDateTime.of(2017, 2, 8, 23, 5), CAFE3);
+        mockMvc.perform(put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(USER1)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
 
     @Test
     @Transactional
@@ -85,6 +95,25 @@ public class VoteRestControllerTest extends AbstractControllerTest{
 
         VOTE_MATCHER.assertEquals(created, returned);
         VOTE_MATCHER.assertCollectionEquals(Arrays.asList(VOTE1, created), service.getAll(USER_ID));
+    }
+
+    @Test
+    @Transactional
+    public void testCreateSameDate() throws Exception {
+        Vote createdLater = new Vote(VOTE1.getId().getUser(),
+                VOTE1.getId().getDateTime().plusHours(1),
+                CAFE2);
+
+        ResultActions action = mockMvc.perform(post(REST_URL)
+                        .with(userHttpBasic(createdLater.getId().getUser()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtil.writeValue(createdLater))
+                        );
+
+        Vote returned = VOTE_MATCHER.fromJsonAction(action);
+
+        assertEquals(createdLater.getCafe(), returned.getCafe());
+        assertEquals(createdLater.getId().getDateTime(), returned.getId().getDateTime());
     }
 
     @Test

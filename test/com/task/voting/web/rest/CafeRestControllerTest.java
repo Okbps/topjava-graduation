@@ -1,6 +1,7 @@
 package com.task.voting.web.rest;
 
 import com.task.voting.TestData;
+import com.task.voting.TestUtil;
 import com.task.voting.model.Cafe;
 import com.task.voting.service.CafeService;
 import com.task.voting.web.json.JsonUtil;
@@ -47,6 +48,14 @@ public class CafeRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(CAFE_MATCHER.contentMatcher(TestData.CAFE1));
+    }
+
+    @Test
+    public void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL + 1)
+                .with(TestUtil.userHttpBasic(USER1)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test

@@ -14,6 +14,8 @@ CREATE TABLE users
   password   VARCHAR(255) NOT NULL
 );
 
+CREATE UNIQUE INDEX users_unique_name_idx ON users (name);
+
 CREATE TABLE user_roles
 (
   user_id INTEGER NOT NULL,
@@ -27,6 +29,8 @@ CREATE TABLE cafes
   id         INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   name       VARCHAR(255)
 );
+
+CREATE UNIQUE INDEX cafes_unique_name_idx ON cafes (name);
 
 CREATE TABLE menus
 (

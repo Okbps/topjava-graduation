@@ -18,9 +18,9 @@ import static com.task.voting.util.ValidationUtil.checkNew;
  * Created by Aspire on 04.03.2017.
  */
 @RestController
-@RequestMapping(CafeRestController.REST_URL)
+@RequestMapping(value = CafeRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CafeRestController {
-    static final String REST_URL = "/rest/cafe";
+    static final String REST_URL = "/rest/cafes";
 
     @Autowired
     private CafeService service;

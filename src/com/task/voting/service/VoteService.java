@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class VoteService {
         repository.delete(vote);
     }
 
-    public Vote get(int userId, LocalDateTime localDateTime) {
-        return repository.get(userId, localDateTime);
+    public Vote get(int userId, LocalDate localDate) {
+        return repository.get(userId, localDate);
     }
 
     public List<Vote> getAll(int userId) {

@@ -62,7 +62,7 @@ public class TestData {
     }
 
     public static Vote getCreatedVote(){
-        return new Vote(USER1, LocalDateTime.of(2017, 3, 8, 10, 0), CAFE2);
+        return new Vote(USER1, LocalDateTime.of(2017, 3, 8, 12, 0), CAFE2);
     }
     public static Vote getUpdatedVote(){
         return new Vote(USER1, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);

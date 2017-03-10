@@ -30,4 +30,9 @@ public class Cafe extends NamedEntity{
         this.id = id;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Cafe{id="+getId()+", name="+name+"}";
+    }
 }

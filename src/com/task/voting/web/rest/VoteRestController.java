@@ -12,16 +12,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.task.voting.util.ValidationUtil.checkVoteTime;
 
 /**
  * Created by Aspire on 04.03.2017.
  */
 @RestController
-@RequestMapping(VoteRestController.REST_URL)
+@RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
-    static final String REST_URL = "/rest/vote";
+    static final String REST_URL = "/rest/votes";
 
     @Autowired
     private VoteService service;
@@ -36,40 +39,31 @@ public class VoteRestController {
         return service.getAll(userId);
     }
 
-    @GetMapping("/{id}/{dateTime}")
+    @GetMapping("/{id}/{date}")
     public Vote get(@PathVariable("id") int userId,
-                    @PathVariable("dateTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime localDateTime) {
-        return service.get(userId, localDateTime);
+                    @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate) {
+        return service.get(userId, localDate);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@Valid @RequestBody Vote vote, @PathVariable("id") int userId) {
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void update(@Valid @RequestBody Vote vote) {
+        checkVoteTime(vote.getId().getDateTime());
         service.save(vote, AuthorizedUser.id());
-//        service.update(vote);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vote> createWithLocation(@Valid @RequestBody Vote vote) {
+        checkVoteTime(vote.getId().getDateTime());
         Vote created = service.save(vote, AuthorizedUser.id());
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+                .path(REST_URL + "/{id}/{date}")
+                .buildAndExpand(
+                        created.getId().getUser().getId(),
+                        created.getId().getDateTime().toLocalDate()
+                        )
+                .toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
-
-//    @PostMapping(consumes ="text/plain;charset=UTF-8")
-//    public ResponseEntity<Vote> createWithLocation(
-//            @RequestParam(value = "userId") int userId,
-//            @RequestParam(value = "dateTime") @DateTimeFormat LocalDateTime ldt,
-//            @RequestParam(value = "cafeId") int cafeId
-//    ){
-//        Vote created = service.save(userId, ldt, cafeId);
-//        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path(REST_URL + "/{id}/{dateTime}")
-//                .buildAndExpand(created.getId(), ldt).toUri();
-//
-//        return ResponseEntity.created(uriOfNewResource).body(created);
-//    }
 }

@@ -9,18 +9,21 @@ import java.time.LocalDateTime;
 
 @NamedQueries({
         @NamedQuery(name = Vote.DELETE, query = "DELETE FROM Vote v WHERE v.id=:votePK"),
+
         @NamedQuery(name = Vote.ALL_SORTED, query = "SELECT v FROM Vote v JOIN FETCH v.cafe " +
                 "WHERE v.id.user.id=:userId " +
                 "ORDER BY v.id.dateTime"),
-        @NamedQuery(name = Vote.BY_USER_DATETIME, query = "SELECT v FROM Vote v " +
+
+        @NamedQuery(name = Vote.BY_USER_DATE, query = "SELECT v FROM Vote v " +
                 "JOIN FETCH v.cafe " +
-//                "LEFT JOIN FETCH v.id.dateTime " +
                 "LEFT JOIN FETCH v.id.user " +
-                "WHERE v.id.user.id=:userId AND v.id.dateTime=:dateTime " +
+                "WHERE v.id.user.id=:userId AND v.id.dateTime >= :startDateTime and v.id.dateTime <= :endDateTime " +
                 "ORDER BY v.id.dateTime"),
+
         @NamedQuery(name = Vote.UPDATE, query = "UPDATE Vote v SET v.cafe = :cafe " +
                 "where v.id=:votePK")
 })
+
 @Entity
 @Table(name="votes")
 public class Vote {
@@ -28,7 +31,7 @@ public class Vote {
     public static final String DELETE = "Vote.delete";
     public static final String UPDATE = "Vote.update";
     public static final String ALL_SORTED = "Vote.getAllSorted";
-    public static final String BY_USER_DATETIME = "Vote.getByUserDateTime";
+    public static final String BY_USER_DATE = "Vote.getByUserDate";
 
     @EmbeddedId
     private VotePK id;
@@ -65,5 +68,13 @@ public class Vote {
 
     public void setUser(User user) {
         this.id.setUser(user);
+    }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "user="+(id==null?null:id.getUser())+
+                ", dateTime="+(id==null?null:id.getDateTime())+
+                ", cafe="+cafe;
     }
 }
