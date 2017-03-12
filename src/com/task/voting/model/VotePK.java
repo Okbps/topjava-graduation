@@ -1,6 +1,5 @@
 package com.task.voting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -11,11 +10,9 @@ import java.time.LocalDateTime;
 
 @Embeddable
 public class VotePK implements Serializable{
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-//    @JsonIdentityReference(alwaysAsId=true) // otherwise first ref as POJO, others as id
     private User user;
 
     @Column(name = "date_time", nullable = false)
@@ -29,7 +26,6 @@ public class VotePK implements Serializable{
         this.dateTime = ldt;
     }
 
-    @JsonIgnore
     public User getUser() {
         return user;
     }

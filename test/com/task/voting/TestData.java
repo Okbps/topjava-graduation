@@ -14,13 +14,13 @@ public class TestData {
 
     public static final ModelMatcher<Cafe> CAFE_MATCHER = ModelMatcher.of(Cafe.class);
     public static final ModelMatcher<CafeMenu> MENU_MATCHER = ModelMatcher.of(CafeMenu.class);
-//    public static final ModelMatcher<Vote> VOTE_MATCHER = ModelMatcher.of(Vote.class);
+    public static final ModelMatcher<Vote> VOTE_MATCHER = ModelMatcher.of(Vote.class);
 
     public static final int USER_ID = START_SEQ;
     public static final int CAFE1_ID = START_SEQ + 5;
     public static final int MENU_ID = START_SEQ + 8;
 
-    public static final User USER1 = new User(USER_ID + 0, "Admin", "admin", Role.ROLE_ADMIN);
+    public static final User USER1 = new User(USER_ID + 0, "Admin", "admin", Role.ROLE_ADMIN, Role.ROLE_USER);
     public static final User USER2 = new User(USER_ID + 1, "Natallia", "password", Role.ROLE_USER);
     public static final User USER3 = new User(USER_ID + 2, "Andrey", "password", Role.ROLE_USER);
     public static final User USER4 = new User(USER_ID + 3, "Nadja", "password", Role.ROLE_USER);
@@ -65,14 +65,15 @@ public class TestData {
         return new Vote(USER1, LocalDateTime.of(2017, 3, 8, 12, 0), CAFE2);
     }
     public static Vote getUpdatedVote(){
-        return new Vote(USER1, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
+        return new Vote(
+                VOTE1.getId().getUser(),
+                VOTE1.getId().getDateTime(),
+                CAFE3);
     }
-
-
-    public static final ModelMatcher<Vote> VOTE_MATCHER = ModelMatcher.of(Vote.class,
-            (expected, actual) -> expected == actual ||
-                    Objects.equals(expected.getCafe(), actual.getCafe())
-                            && Objects.equals(expected.getId().getDateTime(), actual.getId().getDateTime()
-                    )
-    );
+    public static Vote getCreatedLater(){
+        return new Vote(
+                VOTE1.getId().getUser(),
+                VOTE1.getId().getDateTime().plusHours(1),
+                CAFE2);
+    }
 }

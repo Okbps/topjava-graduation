@@ -1,7 +1,6 @@
 package com.task.voting.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by Aspire on 08.02.2017.

@@ -58,21 +58,20 @@ public class VoteRestControllerTest extends AbstractControllerTest{
     public void testUpdate() throws Exception {
         Vote updated = getUpdatedVote();
 
-        mockMvc.perform(put(REST_URL)
+        ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
-                .with(userHttpBasic(USER1)))
-                .andExpect(status().isOk());
+                .with(userHttpBasic(updated.getId().getUser())));
 
-        Vote returned = service.get(USER_ID, updated.getId().getDateTime().toLocalDate());
-        assertEquals(updated.getCafe(), returned.getCafe());
-        assertEquals(updated.getId().getDateTime(), returned.getId().getDateTime());
+        Vote returned = VOTE_MATCHER.fromJsonAction(action);
+
+        VOTE_MATCHER.assertEquals(updated, returned);
     }
 
     @Test
     public void testUpdateInvalid() throws Exception {
         Vote invalid = new Vote(USER1, LocalDateTime.of(2017, 2, 8, 23, 5), CAFE3);
-        mockMvc.perform(put(REST_URL)
+        mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
                 .with(userHttpBasic(USER1)))
@@ -100,9 +99,7 @@ public class VoteRestControllerTest extends AbstractControllerTest{
     @Test
     @Transactional
     public void testCreateSameDate() throws Exception {
-        Vote createdLater = new Vote(VOTE1.getId().getUser(),
-                VOTE1.getId().getDateTime().plusHours(1),
-                CAFE2);
+        Vote createdLater = getCreatedLater();
 
         ResultActions action = mockMvc.perform(post(REST_URL)
                         .with(userHttpBasic(createdLater.getId().getUser()))
@@ -112,8 +109,7 @@ public class VoteRestControllerTest extends AbstractControllerTest{
 
         Vote returned = VOTE_MATCHER.fromJsonAction(action);
 
-        assertEquals(createdLater.getCafe(), returned.getCafe());
-        assertEquals(createdLater.getId().getDateTime(), returned.getId().getDateTime());
+        VOTE_MATCHER.assertEquals(createdLater, returned);
     }
 
     @Test

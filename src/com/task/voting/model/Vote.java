@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(name = Vote.DELETE, query = "DELETE FROM Vote v WHERE v.id=:votePK"),
 
-        @NamedQuery(name = Vote.ALL_SORTED, query = "SELECT v FROM Vote v JOIN FETCH v.cafe " +
+        @NamedQuery(name = Vote.ALL_SORTED, query = "SELECT v FROM Vote v " +
+                "LEFT JOIN FETCH v.cafe " +
+                "LEFT JOIN FETCH v.id.user " +
                 "WHERE v.id.user.id=:userId " +
                 "ORDER BY v.id.dateTime"),
 
         @NamedQuery(name = Vote.BY_USER_DATE, query = "SELECT v FROM Vote v " +
-                "JOIN FETCH v.cafe " +
+                "LEFT JOIN FETCH v.cafe " +
                 "LEFT JOIN FETCH v.id.user " +
                 "WHERE v.id.user.id=:userId AND v.id.dateTime >= :startDateTime and v.id.dateTime <= :endDateTime " +
                 "ORDER BY v.id.dateTime"),
@@ -36,7 +38,7 @@ public class Vote {
     @EmbeddedId
     private VotePK id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "cafe_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Cafe cafe;

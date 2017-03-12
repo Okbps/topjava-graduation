@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
 
-    private User user;
+    private static User user;
 
     public AuthorizedUser(User user) {
         super(user.getName(), user.getPassword(), true, true, true, true, user.getRoles());
@@ -32,14 +32,15 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     }
 
     public static int id() {
-        return get().user.getId();
+        return user.getId();
     }
 
     public void update(User user) {
         this.user = user;
     }
 
-    public User getUser() {
-        return get().user;
+    public static User getUser() {
+        requireNonNull(user, "No authorized user found");
+        return user;
     }
 }

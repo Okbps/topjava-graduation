@@ -20,6 +20,13 @@ public class NamedEntity extends BaseEntity {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o)
+                && o instanceof NamedEntity
+                && name.equals(((NamedEntity)o).getName());
+    }
+
     public void setName(String name) {
         this.name = name;
     }

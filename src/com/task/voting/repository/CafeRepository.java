@@ -4,12 +4,9 @@ import com.task.voting.model.Cafe;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-
-import static com.task.voting.model.Cafe.GRAPH_WITH_MENUS;
 
 /**
  * Created by Aspire on 08.02.2017.

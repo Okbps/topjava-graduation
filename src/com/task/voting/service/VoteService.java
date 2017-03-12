@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
@@ -21,17 +20,6 @@ public class VoteService {
 
     @Autowired
     private VoteRepository repository;
-
-    public Vote save(Vote vote, User user) {
-        Assert.notNull(vote, "vote must not be null");
-        vote.setUser(user);
-        return repository.save(vote);
-    }
-
-    public Vote save(Vote vote, int userId) {
-        Assert.notNull(vote, "vote must not be null");
-        return repository.save(userId, vote.getId().getDateTime(), vote.getCafe().getId());
-    }
 
     public void delete(Vote vote, User user) {
         vote.setUser(user);
@@ -48,6 +36,11 @@ public class VoteService {
 
     public void update(Vote vote) {
         Assert.notNull(vote, "vote must not be null");
-        repository.save(vote);
+        repository.saveOrUpdate(vote);
+    }
+
+    public Vote saveOrUpdate(Vote vote, User user){
+        vote.setUser(user);
+        return repository.saveOrUpdate(vote);
     }
 }

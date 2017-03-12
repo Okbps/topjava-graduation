@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.task.voting.util.ValidationUtil.checkVoteTime;
@@ -31,7 +30,7 @@ public class VoteRestController {
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void delete(@Valid @RequestBody Vote vote) {
-        service.delete(vote, AuthorizedUser.get().getUser());
+        service.delete(vote, AuthorizedUser.getUser());
     }
 
     @GetMapping("/{id}")
@@ -45,25 +44,19 @@ public class VoteRestController {
         return service.get(userId, localDate);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@Valid @RequestBody Vote vote) {
-        checkVoteTime(vote.getId().getDateTime());
-        service.save(vote, AuthorizedUser.id());
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vote> createWithLocation(@Valid @RequestBody Vote vote) {
         checkVoteTime(vote.getId().getDateTime());
-        Vote created = service.save(vote, AuthorizedUser.id());
+        Vote saved = service.saveOrUpdate(vote, AuthorizedUser.getUser());
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}/{date}")
                 .buildAndExpand(
-                        created.getId().getUser().getId(),
-                        created.getId().getDateTime().toLocalDate()
-                        )
+                        saved.getId().getUser().getId(),
+                        saved.getId().getDateTime().toLocalDate()
+                )
                 .toUri();
 
-        return ResponseEntity.created(uriOfNewResource).body(created);
+        return ResponseEntity.created(uriOfNewResource).body(saved);
     }
 }

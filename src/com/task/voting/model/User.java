@@ -7,10 +7,11 @@ import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
-        @NamedQuery(name = User.BY_NAME, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.name=?1"),
+        @NamedQuery(name = User.BY_NAME, query = "SELECT DISTINCT u FROM User u WHERE u.name=?1"),
         @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u ORDER BY u.name"),
 })
 @Entity
@@ -70,12 +71,29 @@ public class User extends NamedEntity {
         }
     }
 
+    private String rolesToString(){
+        return roles.stream()
+                .map(Enum::toString)
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.joining(","));
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o)
+                && o instanceof User
+                && password.equals(getPassword())
+                && roles.equals(((User)o).getRoles());
+    }
+
     @Override
     public String toString() {
+
         return "User (" +
                 "id=" + getId() +
                 ", name=" + name +
-                ", roles=" + roles +
+                ", roles=" + rolesToString() +
                 ')';
     }
 }

@@ -1,18 +1,12 @@
 package com.task.voting.repository;
 
-import com.task.voting.AuthorizedUser;
-import com.task.voting.model.Cafe;
 import com.task.voting.model.Vote;
-import com.task.voting.model.VotePK;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,39 +19,15 @@ public class VoteRepository {
     private EntityManager em;
 
     @Transactional
-    public Vote save(Vote vote) {
-//        em.remove(vote);
-        em.persist(vote);
-        return vote;
-    }
-
-    @Transactional
-    public Vote save(int userId, LocalDateTime ldt, int cafeId) {
-        Vote found = get(userId, ldt.toLocalDate());
+    public Vote saveOrUpdate(Vote vote) {
+        Vote found = get(vote.getId().getUser().getId(), vote.getId().getDateTime().toLocalDate());
 
         if(found==null) {
-
-            int result = em.createNativeQuery(
-                    "INSERT INTO votes(user_id, date_time, cafe_id) VALUES(?,?,?)")
-                    .setParameter(1, userId)
-                    .setParameter(2, Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()), TemporalType.TIMESTAMP)
-                    .setParameter(3, cafeId)
-                    .executeUpdate();
-
-            if(result==1){
-                return get(userId, ldt.toLocalDate());
-            } else {
-                return null;
-            }
-
+            em.persist(vote);
+            return vote;
         }else{
-
-            found.setCafe(em.getReference(Cafe.class, cafeId));
-            found.getId().setDateTime(ldt);
-            return em.merge(found);
-
+            return em.merge(vote);
         }
-
     }
 
     public Vote get(int userId, LocalDate localDate) {
