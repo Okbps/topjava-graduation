@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -37,6 +40,14 @@ public class CafeMenuRepository {
         return em.createNamedQuery(CafeMenu.DELETE).setParameter("id", id).executeUpdate() != 0;
     }
 
-    public List<CafeMenu> getAll() {
-        return em.createNamedQuery(CafeMenu.ALL_SORTED, CafeMenu.class).getResultList();
+    public List<CafeMenu> getAll(Integer cafeId, LocalDate localDate) {
+        TypedQuery<CafeMenu>tq = em.createNamedQuery(CafeMenu.ALL_SORTED, CafeMenu.class);
+
+        tq.setParameter("cafeId", cafeId);
+
+
+        tq.setParameter("startDateTime", localDate.atTime(LocalTime.MIN));
+        tq.setParameter("endDateTime", localDate.atTime(LocalTime.MAX));
+
+        return tq.getResultList();
     }}

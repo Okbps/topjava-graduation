@@ -44,7 +44,7 @@ public abstract class AbstractUserController {
     }
 
     public User get(int id) {
-        log.info("get " + id);
+        log.info("getByDateTime " + id);
         return service.get(id);
     }
 

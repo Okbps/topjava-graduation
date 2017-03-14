@@ -23,7 +23,15 @@ import java.time.LocalDateTime;
                 "ORDER BY v.id.dateTime"),
 
         @NamedQuery(name = Vote.UPDATE, query = "UPDATE Vote v SET v.cafe = :cafe " +
-                "where v.id=:votePK")
+                "WHERE v.id=:votePK"),
+
+//        @NamedQuery(name = Vote.WINNER_BY_DATE, query = "SELECT c FROM Cafe c " +
+//                "WHERE c.id =(SELECT v.cafe.id FROM Vote v GROUP BY v.id COUNT(v.id.user.id)) )"
+        @NamedQuery(name = Vote.WINNER_BY_DATE, query = "SELECT v FROM Vote v " +
+                "WHERE v.id.dateTime >= :startDateTime and v.id.dateTime <= :endDateTime " +
+                "GROUP BY v.cafe " +
+                "ORDER BY COUNT(v.id.user) DESC"
+        )
 })
 
 @Entity
@@ -34,6 +42,7 @@ public class Vote {
     public static final String UPDATE = "Vote.update";
     public static final String ALL_SORTED = "Vote.getAllSorted";
     public static final String BY_USER_DATE = "Vote.getByUserDate";
+    public static final String WINNER_BY_DATE = "Cafe.getWinnerByDate";
 
     @EmbeddedId
     private VotePK id;

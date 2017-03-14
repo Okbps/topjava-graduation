@@ -19,7 +19,11 @@ import java.time.LocalDateTime;
         @NamedQuery(name = CafeMenu.DELETE, query = "DELETE FROM CafeMenu cm WHERE cm.id=:id"),
         @NamedQuery(name = CafeMenu.BY_ID, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe " +
                 "WHERE cm.id=:id ORDER BY cm.dateTime, cm.dish"),
-        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe ORDER BY cm.dateTime, cm.dish"),
+        @NamedQuery(name = CafeMenu.ALL_SORTED, query = "SELECT cm FROM CafeMenu cm JOIN FETCH cm.cafe " +
+                "WHERE (:cafeId IS NULL OR cm.cafe.id=:cafeId) " +
+                    "AND (:startDateTime IS NULL OR cm.dateTime>=:startDateTime)" +
+                    "AND (:endDateTime IS NULL OR cm.dateTime<=:endDateTime)" +
+                "ORDER BY cm.dateTime, cm.dish"),
 })
 @Entity
 @Table(name = "menus")

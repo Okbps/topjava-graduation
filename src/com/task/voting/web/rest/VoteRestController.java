@@ -1,6 +1,7 @@
 package com.task.voting.web.rest;
 
 import com.task.voting.AuthorizedUser;
+import com.task.voting.model.Cafe;
 import com.task.voting.model.Vote;
 import com.task.voting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import static com.task.voting.util.ValidationUtil.checkResultTime;
 import static com.task.voting.util.ValidationUtil.checkVoteTime;
 
 /**
@@ -38,10 +41,19 @@ public class VoteRestController {
         return service.getAll(userId);
     }
 
+    @GetMapping("/reports")
+    public Cafe getWinner(
+            @RequestParam(name="date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate)
+    {
+        checkResultTime(localDate);
+        return service.getWinner(localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
+    }
+
+
     @GetMapping("/{id}/{date}")
     public Vote get(@PathVariable("id") int userId,
                     @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate) {
-        return service.get(userId, localDate);
+        return service.get(userId, localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

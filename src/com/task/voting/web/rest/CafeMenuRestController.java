@@ -1,8 +1,10 @@
 package com.task.voting.web.rest;
 
 import com.task.voting.model.CafeMenu;
+import com.task.voting.model.Vote;
 import com.task.voting.service.CafeMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.task.voting.util.ValidationUtil.checkNew;

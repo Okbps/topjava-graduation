@@ -1,11 +1,15 @@
 package com.task.voting.util;
 
 import com.task.voting.HasId;
-import com.task.voting.util.exception.LateVoteException;
+import com.task.voting.util.exception.WrongTiming;
 import com.task.voting.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import static com.task.voting.util.DateTimeUtil.ZERO_HOUR;
 
 public class ValidationUtil {
     private ValidationUtil() {
@@ -45,10 +49,20 @@ public class ValidationUtil {
     }
 
     public static void checkVoteTime(LocalDateTime ldt){
-        if(ldt.toLocalTime().isAfter(LocalTime.of(22, 59, 59))){
-            throw new LateVoteException("Voting ended at 23:00");
+        if(!ldt.toLocalTime().isBefore(ZERO_HOUR)){
+            throw new WrongTiming("Voting is ended");
         }
 
+    }
+
+    public static void checkResultTime(LocalDate ld){
+        if(ld.equals(LocalDate.now()) && LocalTime.now().isBefore(ZERO_HOUR)){
+            throw new WrongTiming("Results announced at "+ZERO_HOUR.format(DateTimeFormatter.ofPattern("hh:mm")));
+        }
+
+        if(ld.isAfter(LocalDate.now())){
+            throw new WrongTiming("Voting haven't started yet");
+        }
     }
 
     public static Throwable getRootCause(Throwable t) {

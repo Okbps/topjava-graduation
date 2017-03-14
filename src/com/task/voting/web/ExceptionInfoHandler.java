@@ -2,13 +2,12 @@ package com.task.voting.web;
 
 import com.task.voting.util.ValidationUtil;
 import com.task.voting.util.exception.ErrorInfo;
-import com.task.voting.util.exception.LateVoteException;
+import com.task.voting.util.exception.WrongTiming;
 import com.task.voting.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -84,10 +83,10 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler(LateVoteException.class)
+    @ExceptionHandler(WrongTiming.class)
     @ResponseBody
     @Order(Ordered.HIGHEST_PRECEDENCE + 2)
-    public ErrorInfo lateVoteError(HttpServletRequest req, LateVoteException e) {
+    public ErrorInfo lateVoteError(HttpServletRequest req, WrongTiming e) {
         return logAndGetErrorInfo(req, e, false);
     }
 

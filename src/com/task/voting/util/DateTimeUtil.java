@@ -11,6 +11,8 @@ public class DateTimeUtil {
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
+    public static final LocalTime ZERO_HOUR = LocalTime.of(23, 0, 0);
+
     private DateTimeUtil() {
     }
 

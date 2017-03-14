@@ -33,7 +33,7 @@ public class CafeMenuService {
     }
 
     public List<CafeMenu> getAll() {
-        return repository.getAll();
+        return repository.getAll(null, null);
     }
 
     public void update(CafeMenu user) {
