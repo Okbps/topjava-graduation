@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * Created by Aspire on 01.03.2017.
  */
+@SuppressWarnings("ALL")
 @Service
 public class CafeService {
     @Autowired

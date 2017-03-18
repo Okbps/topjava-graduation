@@ -25,12 +25,12 @@ import java.time.LocalDateTime;
         @NamedQuery(name = Vote.UPDATE, query = "UPDATE Vote v SET v.cafe = :cafe " +
                 "WHERE v.id=:votePK"),
 
-//        @NamedQuery(name = Vote.WINNER_BY_DATE, query = "SELECT c FROM Cafe c " +
-//                "WHERE c.id =(SELECT v.cafe.id FROM Vote v GROUP BY v.id COUNT(v.id.user.id)) )"
-        @NamedQuery(name = Vote.WINNER_BY_DATE, query = "SELECT v FROM Vote v " +
+        @NamedQuery(name = Vote.WINNER_BY_DATE, query =
+                "SELECT NEW com.task.voting.to.CafeWithVotes(v.cafe.id, v.cafe.name, COUNT(v.id.user.id)) " +
+                "FROM Vote v " +
                 "WHERE v.id.dateTime >= :startDateTime and v.id.dateTime <= :endDateTime " +
-                "GROUP BY v.cafe " +
-                "ORDER BY COUNT(v.id.user) DESC"
+                "GROUP BY v.cafe.id, v.cafe.name " +
+                "ORDER BY COUNT(v.id.user.id) DESC"
         )
 })
 
@@ -47,7 +47,7 @@ public class Vote {
     @EmbeddedId
     private VotePK id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "cafe_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Cafe cafe;

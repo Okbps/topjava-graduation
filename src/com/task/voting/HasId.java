@@ -2,10 +2,6 @@ package com.task.voting;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/**
- * gkislin
- * 12.02.2017
- */
 public interface HasId {
     Integer getId();
 

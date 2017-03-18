@@ -11,21 +11,33 @@
         "
 >
 
-    <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
-        <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
-        <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
-    </jdbc:initialize-database>
+    <!--<jdbc:initialize-database data-source="dataSource" enabled="${database.init}">-->
+        <!--<jdbc:script location="classpath:db/${jdbc.initLocation}"/>-->
+        <!--<jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>-->
+    <!--</jdbc:initialize-database>-->
 
     <tx:annotation-driven/>
     <context:component-scan base-package="com.task.voting.repository"/>
-    <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
+    <!--<context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>-->
 
-    <bean id="dataSource"
-          class="org.apache.tomcat.jdbc.pool.DataSource"
-          p:driverClassName="org.postgresql.Driver"
-          p:url="${database.url}"
-          p:username="${database.username}"
-          p:password="${database.password}"/>
+    <!--<bean id="dataSource"-->
+          <!--class="org.apache.tomcat.jdbc.pool.DataSource"-->
+          <!--p:driverClassName="org.postgresql.Driver"-->
+          <!--p:url="${database.url}"-->
+          <!--p:username="${database.username}"-->
+          <!--p:password="${database.password}"/>-->
+    <!--<bean id="dataSource"-->
+          <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->
+          <!--p:driverClassName="org.hsqldb.jdbcDriver"-->
+          <!--p:url="${database.url}"-->
+          <!--p:username="${database.username}"-->
+          <!--p:password="${database.password}"-->
+    <!--/>-->
+
+    <jdbc:embedded-database id="dataSource" type="HSQL">
+        <jdbc:script location="classpath:db/iniitHSQLDB.sql"/>
+        <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
+    </jdbc:embedded-database>
 
     <context:property-placeholder location="classpath:db/tomcat.properties" system-properties-mode="OVERRIDE"/>
 

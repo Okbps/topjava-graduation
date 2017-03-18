@@ -1,9 +1,9 @@
 package com.task.voting.service;
 
-import com.task.voting.model.Cafe;
 import com.task.voting.model.User;
 import com.task.voting.model.Vote;
 import com.task.voting.repository.VoteRepository;
+import com.task.voting.to.CafeWithVotes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -11,11 +11,10 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
-
 /**
  * Created by Aspire on 01.03.2017.
  */
+@SuppressWarnings("ALL")
 @Service
 public class VoteService {
 
@@ -31,8 +30,8 @@ public class VoteService {
         return repository.getByDateTime(userId, startDT, endDT);
     }
 
-    public Cafe getWinner(LocalDateTime startDT, LocalDateTime endDT) {
-        return repository.getWinner(startDT, endDT);
+    public List<CafeWithVotes> getWinners(LocalDateTime startDT, LocalDateTime endDT) {
+        return repository.getWinners(startDT, endDT);
     }
 
     public List<Vote> getAll(int userId) {

@@ -1,17 +1,20 @@
 package com.task.voting.repository;
 
-import com.task.voting.model.Cafe;
 import com.task.voting.model.Vote;
+import com.task.voting.to.CafeWithVotes;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Aspire on 08.02.2017.
  */
+@SuppressWarnings("ALL")
 @Repository
 @Transactional(readOnly = true)
 public class VoteRepository {
@@ -44,14 +47,25 @@ public class VoteRepository {
         }
     }
 
-    public Cafe getWinner(LocalDateTime startDT, LocalDateTime endDT){
+    public List<CafeWithVotes> getWinners(LocalDateTime startDT, LocalDateTime endDT){
+        List<CafeWithVotes>list;
+
         try {
-            return em.createNamedQuery(Vote.WINNER_BY_DATE, Cafe.class)
-                    .setParameter("startDateTime", startDT)
+            TypedQuery<CafeWithVotes>tq = em.createNamedQuery(Vote.WINNER_BY_DATE, CafeWithVotes.class);
+
+            list = tq.setParameter("startDateTime", startDT)
                     .setParameter("endDateTime", endDT)
-                    .getSingleResult();
-        }catch(NoResultException e){
-            return null;
+                    .getResultList();
+
+        }catch(NoResultException e) {
+            list = new ArrayList<>();
+        }
+
+        if(!list.isEmpty()) {
+            long votesMaxCount = list.get(0).getVotesCount();
+            return list.stream().filter(c -> c.getVotesCount() == votesMaxCount).collect(Collectors.toList());
+        }else {
+            return list;
         }
     }
 

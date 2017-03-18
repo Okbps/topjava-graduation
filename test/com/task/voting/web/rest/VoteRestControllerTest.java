@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 import static com.task.voting.TestData.*;
 import static com.task.voting.TestUtil.userHttpBasic;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -24,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by Aspire on 06.03.2017.
  */
+@SuppressWarnings("ALL")
 public class VoteRestControllerTest extends AbstractControllerTest{
     private static final String REST_URL = VoteRestController.REST_URL + '/';
 
@@ -51,6 +51,19 @@ public class VoteRestControllerTest extends AbstractControllerTest{
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_MATCHER.contentMatcher(VOTE1));
+    }
+
+    @Test
+    public void testGetWinners() throws Exception{
+        mockMvc.perform(get(REST_URL+
+                "/reports?date="+
+                DateTimeFormatter.ISO_LOCAL_DATE.format(VOTE1.getId().getDateTime()))
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(CAFE_W_VOTES_MATCHER.contentListMatcher(CAFES_W_VOTES));
+
     }
 
     @Test
@@ -91,6 +104,8 @@ public class VoteRestControllerTest extends AbstractControllerTest{
                         );
 
         Vote returned = VOTE_MATCHER.fromJsonAction(action);
+
+        created.setUser(USER1);
 
         VOTE_MATCHER.assertEquals(created, returned);
         VOTE_MATCHER.assertCollectionEquals(Arrays.asList(VOTE1, created), service.getAll(USER_ID));

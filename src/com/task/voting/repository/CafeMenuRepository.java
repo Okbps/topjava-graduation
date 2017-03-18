@@ -1,6 +1,7 @@
 package com.task.voting.repository;
 
 import com.task.voting.model.CafeMenu;
+import com.task.voting.util.DateTimeUtil;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Created by Aspire on 08.02.2017.
  */
+@SuppressWarnings("ALL")
 @Repository
 @Transactional(readOnly = true)
 public class CafeMenuRepository {
@@ -32,7 +34,9 @@ public class CafeMenuRepository {
     }
 
     public CafeMenu get(int id) {
-        return em.createNamedQuery(CafeMenu.BY_ID, CafeMenu.class).setParameter("id", id).getSingleResult();
+        return em.createNamedQuery(CafeMenu.BY_ID, CafeMenu.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Transactional
@@ -44,10 +48,8 @@ public class CafeMenuRepository {
         TypedQuery<CafeMenu>tq = em.createNamedQuery(CafeMenu.ALL_SORTED, CafeMenu.class);
 
         tq.setParameter("cafeId", cafeId);
-
-
-        tq.setParameter("startDateTime", localDate.atTime(LocalTime.MIN));
-        tq.setParameter("endDateTime", localDate.atTime(LocalTime.MAX));
+        tq.setParameter("startDateTime",   localDate==null ? DateTimeUtil.MIN_DATE : localDate.atTime(LocalTime.MIN));
+        tq.setParameter("endDateTime",     localDate==null ? DateTimeUtil.MAX_DATE : localDate.atTime(LocalTime.MAX));
 
         return tq.getResultList();
     }}

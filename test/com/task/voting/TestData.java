@@ -2,6 +2,7 @@ package com.task.voting;
 
 import com.task.voting.matcher.ModelMatcher;
 import com.task.voting.model.*;
+import com.task.voting.to.CafeWithVotes;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public class TestData {
     public static final ModelMatcher<Cafe> CAFE_MATCHER = ModelMatcher.of(Cafe.class);
     public static final ModelMatcher<CafeMenu> MENU_MATCHER = ModelMatcher.of(CafeMenu.class);
     public static final ModelMatcher<Vote> VOTE_MATCHER = ModelMatcher.of(Vote.class);
+    public static final ModelMatcher<CafeWithVotes> CAFE_W_VOTES_MATCHER = ModelMatcher.of(CafeWithVotes.class);
 
     public static final int USER_ID = START_SEQ;
     public static final int CAFE1_ID = START_SEQ + 5;
@@ -43,15 +45,19 @@ public class TestData {
     public static final Vote VOTE4 = new Vote(USER4, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
     public static final Vote VOTE5 = new Vote(USER5, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
 
+    public static final CafeWithVotes CWV1 = new CafeWithVotes(CAFE1,2);
+    public static final CafeWithVotes CWV3 = new CafeWithVotes(CAFE3,2);
+
     public static final List<Cafe> CAFES = Arrays.asList(CAFE3, CAFE1, CAFE2);
     public static final List<CafeMenu> MENUS = Arrays.asList(CAFE_MENU5, CAFE_MENU3, CAFE_MENU2, CAFE_MENU1, CAFE_MENU4, CAFE_MENU6);
     public static final List<Vote> VOTES = Arrays.asList(VOTE1);
+    public static final List<CafeWithVotes> CAFES_W_VOTES = Arrays.asList(CWV1, CWV3);
 
     public static Cafe getCreatedCafe() {
         return new Cafe(null, "New cafe");
     }
     public static Cafe getUpdatedCafe() {
-        return new Cafe(CAFE1_ID, "Updated cafe");
+        return new Cafe(CAFE1_ID, "Казачны замак");
     }
 
     public static CafeMenu getCreatedMenu() {
@@ -62,7 +68,7 @@ public class TestData {
     }
 
     public static Vote getCreatedVote(){
-        return new Vote(USER1, LocalDateTime.of(2017, 3, 8, 12, 0), CAFE2);
+        return new Vote(null, LocalDateTime.of(2017, 3, 8, 12, 0), CAFE2);
     }
     public static Vote getUpdatedVote(){
         return new Vote(

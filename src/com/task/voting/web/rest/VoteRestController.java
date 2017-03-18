@@ -1,9 +1,9 @@
 package com.task.voting.web.rest;
 
 import com.task.voting.AuthorizedUser;
-import com.task.voting.model.Cafe;
 import com.task.voting.model.Vote;
 import com.task.voting.service.VoteService;
+import com.task.voting.to.CafeWithVotes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -23,6 +23,7 @@ import static com.task.voting.util.ValidationUtil.checkVoteTime;
 /**
  * Created by Aspire on 04.03.2017.
  */
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
@@ -42,11 +43,11 @@ public class VoteRestController {
     }
 
     @GetMapping("/reports")
-    public Cafe getWinner(
+    public List<CafeWithVotes> getWinners(
             @RequestParam(name="date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate)
     {
         checkResultTime(localDate);
-        return service.getWinner(localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
+        return service.getWinners(localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
     }
 
 

@@ -20,6 +20,7 @@ import static com.task.voting.util.ValidationUtil.checkNew;
 /**
  * Created by Aspire on 04.03.2017.
  */
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = CafeMenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CafeMenuRestController {
@@ -39,8 +40,11 @@ public class CafeMenuRestController {
     }
 
     @GetMapping
-    public List<CafeMenu> getAll() {
-        return service.getAll();
+    public List<CafeMenu> getAll(
+            @RequestParam(name="cafe_id", required = false) Integer cafeId,
+            @RequestParam(name="date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate
+    ) {
+        return service.getAll(cafeId, localDate);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

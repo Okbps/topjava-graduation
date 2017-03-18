@@ -17,6 +17,7 @@ import static com.task.voting.util.ValidationUtil.checkNew;
 /**
  * Created by Aspire on 04.03.2017.
  */
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = CafeRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CafeRestController {

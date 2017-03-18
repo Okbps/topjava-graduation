@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
@@ -14,6 +15,7 @@ import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
 /**
  * Created by Aspire on 01.03.2017.
  */
+@SuppressWarnings("ALL")
 @Service
 public class CafeMenuService {
     @Autowired
@@ -32,8 +34,8 @@ public class CafeMenuService {
         return checkNotFoundWithId(repository.get(id), id);
     }
 
-    public List<CafeMenu> getAll() {
-        return repository.getAll(null, null);
+    public List<CafeMenu> getAll(Integer cafeId, LocalDate localDate) {
+        return repository.getAll(cafeId, localDate);
     }
 
     public void update(CafeMenu user) {

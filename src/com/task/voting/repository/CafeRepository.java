@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Aspire on 08.02.2017.
  */
 
+@SuppressWarnings("ALL")
 @Repository
 @Transactional(readOnly = true)
 public class CafeRepository {
