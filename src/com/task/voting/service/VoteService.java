@@ -4,6 +4,7 @@ import com.task.voting.model.User;
 import com.task.voting.model.Vote;
 import com.task.voting.repository.VoteRepository;
 import com.task.voting.to.CafeWithVotes;
+import com.task.voting.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -22,6 +23,7 @@ public class VoteService {
     private VoteRepository repository;
 
     public void delete(Vote vote, User user) {
+        ValidationUtil.checkNotFound(vote, "selected userId and date");
         vote.setUser(user);
         repository.delete(vote);
     }

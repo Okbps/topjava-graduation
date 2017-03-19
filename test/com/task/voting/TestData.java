@@ -3,6 +3,7 @@ package com.task.voting;
 import com.task.voting.matcher.ModelMatcher;
 import com.task.voting.model.*;
 import com.task.voting.to.CafeWithVotes;
+import com.task.voting.util.PasswordUtil;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -40,10 +41,6 @@ public class TestData {
     public static final CafeMenu CAFE_MENU6 = new CafeMenu(MENU_ID + 5, CAFE3, LocalDateTime.of(2017, 2, 8, 10, 0), "Pepperoni", 9);
 
     public static final Vote VOTE1 = new Vote(USER1, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE1);
-    public static final Vote VOTE2 = new Vote(USER2, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE1);
-    public static final Vote VOTE3 = new Vote(USER3, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE2);
-    public static final Vote VOTE4 = new Vote(USER4, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
-    public static final Vote VOTE5 = new Vote(USER5, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
 
     public static final CafeWithVotes CWV1 = new CafeWithVotes(CAFE1,2);
     public static final CafeWithVotes CWV3 = new CafeWithVotes(CAFE3,2);
@@ -81,5 +78,23 @@ public class TestData {
                 VOTE1.getId().getUser(),
                 VOTE1.getId().getDateTime().plusHours(1),
                 CAFE2);
+    }
+
+    public static final ModelMatcher<User> USER_MATCHER = ModelMatcher.of(User.class,
+            (expected, actual) -> expected == actual ||
+                    (comparePassword(expected.getPassword(), actual.getPassword())
+                            && Objects.equals(expected.getId(), actual.getId())
+                            && Objects.equals(expected.getName(), actual.getName())
+                            && Objects.equals(expected.getRoles(), actual.getRoles())
+                    )
+    );
+
+    private static boolean comparePassword(String rawOrEncodedPassword, String password) {
+        if (PasswordUtil.isEncoded(rawOrEncodedPassword)) {
+            return rawOrEncodedPassword.equals(password);
+        } else if (!PasswordUtil.isMatch(rawOrEncodedPassword, password)) {
+            return false;
+        }
+        return true;
     }
 }

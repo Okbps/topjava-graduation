@@ -7,11 +7,11 @@ DELETE FROM users;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, password) VALUES
-  ('Admin', 'admin'),
- ('Natallia', 'password'),
- ('Andrey', 'password'),
- ('Nadja', 'password'),
- ('Vera', 'password');
+('Admin',     '$2a$10$rvmIUbnU5iIWSSyc8.A5S.gcgIMR8d8iWcH3rv.0wv0f658hVxz8e'),
+('Natallia',  '$2a$10$Qludsb.RQGrAv9vjI0pNAOyjxCaYhhrN/60tztG34Ib0rfuRD.1a2'),
+('Andrey',    '$2a$10$Qludsb.RQGrAv9vjI0pNAOyjxCaYhhrN/60tztG34Ib0rfuRD.1a2'),
+('Nadja',     '$2a$10$Qludsb.RQGrAv9vjI0pNAOyjxCaYhhrN/60tztG34Ib0rfuRD.1a2'),
+('Vera',      '$2a$10$Qludsb.RQGrAv9vjI0pNAOyjxCaYhhrN/60tztG34Ib0rfuRD.1a2');
 
 INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_ADMIN', 100000),

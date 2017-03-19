@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static com.task.voting.util.UserUtil.prepareToSave;
 import static com.task.voting.util.ValidationUtil.checkNotFound;
 import static com.task.voting.util.ValidationUtil.checkNotFoundWithId;
 
@@ -22,7 +23,7 @@ public class UserService implements UserDetailsService {
 
     public User save(User user) {
         Assert.notNull(user, "user must not be null");
-        return repository.save(user);
+        return repository.save(prepareToSave(user));
     }
 
     public void delete(int id) {
@@ -39,7 +40,7 @@ public class UserService implements UserDetailsService {
 
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        repository.save(user);
+        repository.save(prepareToSave(user));
     }
 
     @Override

@@ -130,9 +130,9 @@ public class VoteRestControllerTest extends AbstractControllerTest{
     @Test
     @Transactional
     public void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL)
+        mockMvc.perform(
+                delete(REST_URL+"100000/2017-02-08")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(VOTE1))
                 .with(userHttpBasic(USER1)))
                 .andExpect(status().isOk());
         VOTE_MATCHER.assertCollectionEquals(Arrays.asList(), service.getAll(USER_ID));
