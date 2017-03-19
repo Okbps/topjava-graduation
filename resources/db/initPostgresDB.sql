@@ -16,6 +16,8 @@ CREATE TABLE users
 
 CREATE UNIQUE INDEX users_unique_name_idx ON users (name);
 
+CREATE UNIQUE INDEX users_unique_name_idx ON users (name);
+
 CREATE TABLE user_roles
 (
   user_id INTEGER NOT NULL,
