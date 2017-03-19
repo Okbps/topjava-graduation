@@ -41,10 +41,6 @@ public class TestData {
     public static final CafeMenu CAFE_MENU6 = new CafeMenu(MENU_ID + 5, CAFE3, LocalDateTime.of(2017, 2, 8, 10, 0), "Pepperoni", 9);
 
     public static final Vote VOTE1 = new Vote(USER1, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE1);
-    public static final Vote VOTE2 = new Vote(USER2, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE1);
-    public static final Vote VOTE3 = new Vote(USER3, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE2);
-    public static final Vote VOTE4 = new Vote(USER4, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
-    public static final Vote VOTE5 = new Vote(USER5, LocalDateTime.of(2017, 2, 8, 10, 0), CAFE3);
 
     public static final CafeWithVotes CWV1 = new CafeWithVotes(CAFE1,2);
     public static final CafeWithVotes CWV3 = new CafeWithVotes(CAFE3,2);

@@ -32,13 +32,15 @@ public class VoteRestController {
     @Autowired
     private VoteService service;
 
-    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@Valid @RequestBody Vote vote) {
+    @DeleteMapping("/{userId}/{date}")
+    public void delete(@PathVariable("userId") int userId,
+                       @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate) {
+        Vote vote = service.get(userId, localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
         service.delete(vote, AuthorizedUser.getUser());
     }
 
-    @GetMapping("/{id}")
-    public List<Vote> getAll(@PathVariable("id") int userId) {
+    @GetMapping("/{userId}")
+    public List<Vote> getAll(@PathVariable("userId") int userId) {
         return service.getAll(userId);
     }
 
@@ -51,8 +53,8 @@ public class VoteRestController {
     }
 
 
-    @GetMapping("/{id}/{date}")
-    public Vote get(@PathVariable("id") int userId,
+    @GetMapping("/{userId}/{date}")
+    public Vote get(@PathVariable("userId") int userId,
                     @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate) {
         return service.get(userId, localDate.atTime(LocalTime.MIN), localDate.atTime(LocalTime.MAX));
     }
@@ -63,7 +65,7 @@ public class VoteRestController {
         Vote saved = service.saveOrUpdate(vote, AuthorizedUser.getUser());
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}/{date}")
+                .path(REST_URL + "/{userId}/{date}")
                 .buildAndExpand(
                         saved.getId().getUser().getId(),
                         saved.getId().getDateTime().toLocalDate()
