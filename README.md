@@ -1,6 +1,6 @@
 # Graduation project from TopJava online internship
 
-JSON API using Hibernate + SpringMVC + Spring Security without frontend.
+JSON API using Hibernate + Spring MVC + Spring Security without frontend.
 
 The task is:
 
